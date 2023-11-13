@@ -3,6 +3,7 @@ using flutterApi.Interfaces;
 using flutterApi.Models;
 using login.Models;
 using Mapster;
+using Microsoft.AspNetCore.Mvc;
 
 namespace flutterApi.Services
 {
@@ -30,6 +31,44 @@ namespace flutterApi.Services
                 }
             }
             return output;
+        }
+
+        public async Task<ReturnSearchAgeLimt>GetAgeLimitId(int age,int MedicalCompanyId)
+        {
+          var output= new ReturnSearchAgeLimt();
+
+            
+            var ageLimits=await FindAll(x=>x.MedicalCompanyId==MedicalCompanyId);
+            foreach (var item in ageLimits)
+            {
+                if (item.From == age)
+                {
+                    output.Id = item.Id;
+                    output.Message = string.Empty;
+                    break;
+                }
+               
+                if (item.To == age)
+                {
+                    output.Id = item.Id;
+                    output.Message = string.Empty;
+                    break;
+
+                }
+                if(item.From <age && item.To > age)
+                {
+                    output.Id = item.Id;
+                    output.Message = string.Empty;
+                    break;
+                }
+
+                else
+                {
+                    output.Message = "Wrong Age";
+                }
+            }
+            return output;
+
         }
     }
 }

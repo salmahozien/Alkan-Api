@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using login.Models;
 
@@ -11,9 +12,10 @@ using login.Models;
 namespace flutterApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231113083558_EditMedicalPricingData")]
+    partial class EditMedicalPricingData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,28 +255,6 @@ namespace flutterApi.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("CompanyInfo");
-                });
-
-            modelBuilder.Entity("flutterApi.Models.HomePrice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("homePrices");
                 });
 
             modelBuilder.Entity("flutterApi.Models.ImageAccidentDB", b =>
@@ -1022,17 +1002,6 @@ namespace flutterApi.Migrations
                     b.Navigation("CarModel");
 
                     b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("flutterApi.Models.HomePrice", b =>
-                {
-                    b.HasOne("flutterApi.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("flutterApi.Models.Insurance", b =>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using login.Models;
 
@@ -11,9 +12,10 @@ using login.Models;
 namespace flutterApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231113074723_AddMedicalPricing")]
+    partial class AddMedicalPricing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,28 +257,6 @@ namespace flutterApi.Migrations
                     b.ToTable("CompanyInfo");
                 });
 
-            modelBuilder.Entity("flutterApi.Models.HomePrice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("homePrices");
-                });
-
             modelBuilder.Entity("flutterApi.Models.ImageAccidentDB", b =>
                 {
                     b.Property<int>("ImageAccidentDBId")
@@ -428,16 +408,16 @@ namespace flutterApi.Migrations
                     b.ToTable("medicalInsurancePrices");
                 });
 
-            modelBuilder.Entity("flutterApi.Models.MedicalPricingData", b =>
+            modelBuilder.Entity("flutterApi.Models.MedicalPricing", b =>
                 {
-                    b.Property<int>("MedicalPricingDataId")
+                    b.Property<int>("MedicalPricingId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicalPricingDataId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicalPricingId"), 1L, 1);
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -446,15 +426,9 @@ namespace flutterApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.HasKey("MedicalPricingId");
 
-                    b.HasKey("MedicalPricingDataId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("medicalPricingsData");
+                    b.ToTable("medicalPricings");
                 });
 
             modelBuilder.Entity("flutterApi.Models.PersonalImage", b =>
@@ -1024,17 +998,6 @@ namespace flutterApi.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("flutterApi.Models.HomePrice", b =>
-                {
-                    b.HasOne("flutterApi.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("flutterApi.Models.Insurance", b =>
                 {
                     b.HasOne("flutterApi.Models.CompanyInfo", "CompanyInfo")
@@ -1074,17 +1037,6 @@ namespace flutterApi.Migrations
                     b.Navigation("AgeLimits");
 
                     b.Navigation("CompanyHealthInsuranceTypes");
-                });
-
-            modelBuilder.Entity("flutterApi.Models.MedicalPricingData", b =>
-                {
-                    b.HasOne("flutterApi.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("flutterApi.Models.PersonalImage", b =>

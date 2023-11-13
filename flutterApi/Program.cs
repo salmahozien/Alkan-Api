@@ -102,6 +102,8 @@ builder.Services.AddScoped<IPlaceOfTreatmentService, PlaceOfTreatmentService>();
 builder.Services.AddScoped<IPlaceOfTreatmentDetailsService, PlaceOfTreatmentDetailsService>();
 builder.Services.AddScoped<IAgeLimitesService, AgeLimitesService>();
 builder.Services.AddScoped<ImedicalInsurancePricesService, medicalInsurancePricesService>();
+builder.Services.AddScoped<IMedicalPricingDataService, MedicalPricingDataService>();
+
 
 //builder.Services.AddScoped<IBaseRepository<T>,BaseRepository>();
 builder.Services.AddControllers()

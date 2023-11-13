@@ -25,5 +25,15 @@ namespace flutterApi.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("GetMedicalInsurancePrice")]
+       public async Task<IActionResult> GetMedicalInsurancePrice(int type, int age, int MedicalCompanyId,float Price)
+        {
+            var result = await _medicalInsurancePricesService.GetMedicalInsurancePrice(type,age,MedicalCompanyId, Price);
+            if (result.Message != string.Empty || result.PriceAndPremium == null)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result.PriceAndPremium);
+        }
     }
 }
