@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using login.Models;
 
@@ -11,9 +12,10 @@ using login.Models;
 namespace flutterApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231114101017_AddCompanyIdToHomeCompany")]
+    partial class AddCompanyIdToHomeCompany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,36 +273,6 @@ namespace flutterApi.Migrations
                     b.ToTable("HomeCompany");
                 });
 
-            modelBuilder.Entity("flutterApi.Models.HomeLimits", b =>
-                {
-                    b.Property<int>("HomeLimitsId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HomeLimitsId"), 1L, 1);
-
-                    b.Property<int>("From")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HomeCompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NetPremium")
-                        .HasColumnType("int");
-
-                    b.Property<int>("To")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalInstallment")
-                        .HasColumnType("int");
-
-                    b.HasKey("HomeLimitsId");
-
-                    b.HasIndex("HomeCompanyId");
-
-                    b.ToTable("homeLimits");
-                });
-
             modelBuilder.Entity("flutterApi.Models.HomePrice", b =>
                 {
                     b.Property<int>("Id")
@@ -312,11 +284,11 @@ namespace flutterApi.Migrations
                     b.Property<int>("HomeCompanyId")
                         .HasColumnType("int");
 
-                    b.Property<double?>("PriceOfBuildings")
-                        .HasColumnType("float");
+                    b.Property<int>("HomeCompnayId")
+                        .HasColumnType("int");
 
-                    b.Property<double?>("PriceOfTheContentOfBuilding")
-                        .HasColumnType("float");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -1078,21 +1050,10 @@ namespace flutterApi.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("flutterApi.Models.HomeLimits", b =>
-                {
-                    b.HasOne("flutterApi.Models.HomeCompany", "HomeCompany")
-                        .WithMany()
-                        .HasForeignKey("HomeCompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("HomeCompany");
-                });
-
             modelBuilder.Entity("flutterApi.Models.HomePrice", b =>
                 {
                     b.HasOne("flutterApi.Models.HomeCompany", "HomeCompany")
-                        .WithMany("PriceList")
+                        .WithMany()
                         .HasForeignKey("HomeCompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1372,11 +1333,6 @@ namespace flutterApi.Migrations
             modelBuilder.Entity("flutterApi.Models.CompanyInfo", b =>
                 {
                     b.Navigation("insurance");
-                });
-
-            modelBuilder.Entity("flutterApi.Models.HomeCompany", b =>
-                {
-                    b.Navigation("PriceList");
                 });
 
             modelBuilder.Entity("flutterApi.Models.Insurance", b =>

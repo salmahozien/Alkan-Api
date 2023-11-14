@@ -31,7 +31,7 @@ namespace flutterApi.Controllers
         public async Task<IActionResult> GetAllMedicalCompanies()
         {
             var AllMedicalCompanies = await _mediicalCompanyService.GetAll();
-            if (AllMedicalCompanies == null)
+            if (AllMedicalCompanies.Count() == 0)
             {
                 return Ok("No Company Added");
             }

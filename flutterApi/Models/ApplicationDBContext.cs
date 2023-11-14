@@ -39,6 +39,8 @@ namespace login.Models
         public DbSet<MedicalInsurancePrice> medicalInsurancePrices { get; set; }
         public DbSet<MedicalPricingData>medicalPricingsData { get; set; }
         public DbSet<HomePrice> homePrices { get; set; }
+        public DbSet<HomeCompany> HomeCompany { get; set; }
+        public DbSet<HomeLimits> homeLimits { get; set; }
 
 
 

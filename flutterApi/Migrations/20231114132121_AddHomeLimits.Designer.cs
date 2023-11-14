@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using login.Models;
 
@@ -11,9 +12,10 @@ using login.Models;
 namespace flutterApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231114132121_AddHomeLimits")]
+    partial class AddHomeLimits
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -312,10 +314,10 @@ namespace flutterApi.Migrations
                     b.Property<int>("HomeCompanyId")
                         .HasColumnType("int");
 
-                    b.Property<double?>("PriceOfBuildings")
+                    b.Property<double>("PriceOfBuildings")
                         .HasColumnType("float");
 
-                    b.Property<double?>("PriceOfTheContentOfBuilding")
+                    b.Property<double>("PriceOfTheContentOfBuilding")
                         .HasColumnType("float");
 
                     b.Property<string>("UserId")
