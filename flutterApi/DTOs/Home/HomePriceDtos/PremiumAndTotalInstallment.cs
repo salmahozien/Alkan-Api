@@ -2,9 +2,9 @@
 {
     public class PremiumAndTotalInstallment
     {
-        public int? PremiumForBuilding { get; set; }
-        public int? TotalInstallmentForBuilding { get; set; }
-        public int? PremiumForContent { get; set; }
-        public int? TotalInstallmentForContent { get; set; }
+        public double? PremiumForBuilding { get; set; }
+        public double? TotalInstallmentForBuilding { get; set; }
+        public double? PremiumForContent { get; set; }
+        public double? TotalInstallmentForContent { get; set; }
     }
 }

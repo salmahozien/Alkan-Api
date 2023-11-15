@@ -9,5 +9,6 @@ namespace flutterApi.Interfaces
     {
         Task<ReturnHomeLimits> AddHomeLimits(CreateHomeLimitsDto model);
         Task<ReturnPremiumAndTotalInstallment> GtPremiumAndTotalInstallment([Optional] double BuildingPrice, [Optional] double contentPrice, int CompanyId);
+        Task<ReturnPriceDto> GetPrice(double Price, int CompanyId,string type);
     }
 }

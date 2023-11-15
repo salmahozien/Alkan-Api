@@ -1,4 +1,5 @@
 ﻿using flutterApi.DTOs.Home.HomePriceDtos;
+using flutterApi.Enums;
 using flutterApi.Interfaces;
 using flutterApi.Models;
 using login.Models;
@@ -11,22 +12,23 @@ namespace flutterApi.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly IHomeCompaniesService _homeCompaniesService;
-     
+
         private readonly IHomeLimitsService _homeLimitsService;
         public HomePriceService(ApplicationDBContext Context, UserManager<User> userManager, IHomeCompaniesService homeCompaniesService, IHomeLimitsService homeLimitsService) : base(Context)
         {
             _userManager = userManager;
             _homeCompaniesService = homeCompaniesService;
-         
+
             _homeLimitsService = homeLimitsService;
         }
 
-        public async  Task<ReturnHomePriceDto> AddHomePrice(CreateHomePriceDto model)
+        public async Task<ReturnHomePriceDto> AddHomePrice(CreateHomePriceDto model)
         {
-            var output= new ReturnHomePriceDto();
-            if(model == null) { output.Message = "Empty Model"; }
+            var output = new ReturnHomePriceDto();
+            if (model == null) { output.Message = "Empty Model"; }
             else
             {
+
                 var user = await _userManager.FindByIdAsync(model.UserId);
                 if (user == null) { output.Message = "User Not Found!"; }
                 else
@@ -36,7 +38,9 @@ namespace flutterApi.Services
                     else
                     {
 
+
                         var HomePrice = model.Adapt<HomePrice>();
+
                         if (HomePrice == null) { output.Message = "Can't Add Price"; }
                         else
                         {
@@ -46,39 +50,123 @@ namespace flutterApi.Services
                         }
                     }
                 }
+
             }
-            return output;  
+            return output;
         }
-        public async Task<ReturnPremiumAndTotalInstallment> GetPremiumAndTotalInstallment( int HomePriceId)
+        /* public async Task<ReturnPremiumAndTotalInstallment> GetPremiumAndTotalInstallment(int HomePriceId)
+         {
+             var output = new ReturnPremiumAndTotalInstallment();
+             var homeprice = await FindById(HomePriceId);
+             if (homeprice == null) { output.Message = "Can't Find Price!"; }
+             else
+             {
+                 if (homeprice.PriceOfBuildings != null && homeprice.PriceOfTheContentOfBuilding != null)
+                 {
+                     var x = await _homeLimitsService.GtPremiumAndTotalInstallment((double)homeprice.PriceOfBuildings, (double)homeprice.PriceOfTheContentOfBuilding, homeprice.HomeCompanyId);
+                     if (x.Message != string.Empty) { output.Message = x.Message; }
+                     else { output.premiumAndTotal = x.premiumAndTotal; }
+
+                 }
+
+                 if (homeprice.PriceOfBuildings != null && homeprice.PriceOfTheContentOfBuilding == null)
+                 {
+                     var x = await _homeLimitsService.GtPremiumAndTotalInstallment((double)homeprice.PriceOfBuildings, 0, homeprice.HomeCompanyId);
+                     if (x.Message != string.Empty) { output.Message = x.Message; }
+                     else { output.premiumAndTotal = x.premiumAndTotal; }
+                 }
+                 if (homeprice.PriceOfBuildings == null && homeprice.PriceOfTheContentOfBuilding != null)
+                 {
+                     var x = await _homeLimitsService.GtPremiumAndTotalInstallment(0, (double)homeprice.PriceOfTheContentOfBuilding, homeprice.HomeCompanyId);
+                     if (x.Message != string.Empty) { output.Message = x.Message; }
+                     else { output.premiumAndTotal = x.premiumAndTotal; }
+
+                 }
+             }
+             return output;
+         }*/
+        public async Task<ReturnPremiumAndTotalInstallment> GetPremiumAndTotalInstallment(int HomePriceId)
         {
-            var output= new ReturnPremiumAndTotalInstallment();
-            var homeprice=await FindById(HomePriceId);
+            string M = string.Empty;
+            var output = new ReturnPremiumAndTotalInstallment();
+            var homeprice = await FindById(HomePriceId);
+
             if (homeprice == null) { output.Message = "Can't Find Price!"; }
             else
             {
-                if (homeprice.PriceOfBuildings != null && homeprice.PriceOfTheContentOfBuilding != null)
+                var company = await _homeCompaniesService.FindById(homeprice.HomeCompanyId);
+                if (company.Code == HomeCompanies.GIG.ToString())
                 {
-                    var x = await _homeLimitsService.GtPremiumAndTotalInstallment((double)homeprice.PriceOfBuildings, (double)homeprice.PriceOfTheContentOfBuilding, homeprice.HomeCompanyId);
-                    if (x.Message != string.Empty) { output.Message = x.Message; }
-                    else { output.premiumAndTotal = x.premiumAndTotal; }
-
+                    if (homeprice.PriceOfBuildings != null)
+                    {
+                        M = "Building";
+                    }
+                    else
+                    {
+                        M = "Content";
+                    }
                 }
+
+
+
+                else
+                {
+                    if (homeprice.PriceOfBuildings != null && homeprice.PriceOfTheContentOfBuilding != null)
+                    {
+                        if (homeprice.PriceOfBuildings == homeprice.PriceOfTheContentOfBuilding)
+                        {
+                            var price = await _homeLimitsService.GetPrice((double)homeprice.PriceOfBuildings, homeprice.HomeCompanyId, M);
+                            var x = new PremiumAndTotalInstallment()
+                            {
+                                PremiumForBuilding = price.Price.Premium,
+                                PremiumForContent = price.Price.Premium,
+                                TotalInstallmentForBuilding = price.Price.total,
+                                TotalInstallmentForContent = price.Price.total,
+                            };
+                            output.premiumAndTotal = x;
+                        }
+                        else
+                        {
+                            var priceBuilding = await _homeLimitsService.GetPrice((double)homeprice.PriceOfBuildings, homeprice.HomeCompanyId, M);
+                            var x = new PremiumAndTotalInstallment()
+                            {
+                                PremiumForBuilding = priceBuilding.Price.Premium,
+                                TotalInstallmentForBuilding = priceBuilding.Price.total,
+                            };
+
+                            var priceContent = await _homeLimitsService.GetPrice((double)homeprice.PriceOfTheContentOfBuilding, homeprice.HomeCompanyId, M);
+                            x.PremiumForContent = priceContent.Price.Premium;
+                            x.TotalInstallmentForContent = priceContent.Price.total;
+                            output.premiumAndTotal = x;
+                        }
+                    }
 
                     if (homeprice.PriceOfBuildings != null && homeprice.PriceOfTheContentOfBuilding == null)
                     {
-                        var x = await _homeLimitsService.GtPremiumAndTotalInstallment((double)homeprice.PriceOfBuildings, 0, homeprice.HomeCompanyId);
-                        if (x.Message != string.Empty) { output.Message = x.Message; }
-                        else { output.premiumAndTotal = x.premiumAndTotal; }
+                        var priceBuilding = await _homeLimitsService.GetPrice((double)homeprice.PriceOfBuildings, homeprice.HomeCompanyId, M);
+                        var x = new PremiumAndTotalInstallment()
+                        {
+                            PremiumForBuilding = priceBuilding.Price.Premium,
+                            TotalInstallmentForBuilding = priceBuilding.Price.total,
+                        };
+                        output.premiumAndTotal = x;
                     }
+
                     if (homeprice.PriceOfBuildings == null && homeprice.PriceOfTheContentOfBuilding != null)
                     {
-                        var x = await _homeLimitsService.GtPremiumAndTotalInstallment(0, (double)homeprice.PriceOfTheContentOfBuilding, homeprice.HomeCompanyId);
-                        if (x.Message != string.Empty) { output.Message = x.Message; }
-                        else { output.premiumAndTotal = x.premiumAndTotal; }
-
+                        var priceContent = await _homeLimitsService.GetPrice((Double)homeprice.PriceOfTheContentOfBuilding, homeprice.HomeCompanyId, M);
+                        var x = new PremiumAndTotalInstallment()
+                        {
+                            PremiumForContent = priceContent.Price.Premium,
+                            TotalInstallmentForContent = priceContent.Price.total,
+                        };
+                        output.premiumAndTotal = x;
                     }
+
                 }
-            return output;
+            }
+                return output;
+            }
         }
     }
-}
+
