@@ -2,7 +2,7 @@
 {
     public class PriceDto
     {
-        public int? Premium { get; set; }
-        public int?total { get; set; }
+        public double? Premium { get; set; }
+        public double? total { get; set; }
     }
 }

@@ -3,7 +3,7 @@
     public class ReturnPremiumAndTotalInstallment
     {
         public string? Message { get; set; }=string.Empty;
-       public PremiumAndTotalInstallment? premiumAndTotal {  get; set; }
+       public PremiumAndTotalInstallmentForHome? premiumAndTotal {  get; set; }
 
     }
 }

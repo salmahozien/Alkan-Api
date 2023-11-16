@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using login.Models;
 
@@ -11,9 +12,10 @@ using login.Models;
 namespace flutterApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231116111756_EditPersonalAccidentLimit")]
+    partial class EditPersonalAccidentLimit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -563,33 +565,6 @@ namespace flutterApi.Migrations
                     b.HasIndex("PersonalAccidentCompanyId");
 
                     b.ToTable("PersonalAccidentLimit");
-                });
-
-            modelBuilder.Entity("flutterApi.Models.PersonalAccidentPrice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("PersonalAccidentCompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<double?>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonalAccidentCompanyId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PersonalAccidentPrice");
                 });
 
             modelBuilder.Entity("flutterApi.Models.PersonalImage", b =>
@@ -1250,25 +1225,6 @@ namespace flutterApi.Migrations
                         .IsRequired();
 
                     b.Navigation("MedicalCompany");
-                });
-
-            modelBuilder.Entity("flutterApi.Models.PersonalAccidentPrice", b =>
-                {
-                    b.HasOne("flutterApi.Models.PersonalAccidentCompany", "HomeCompany")
-                        .WithMany()
-                        .HasForeignKey("PersonalAccidentCompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("flutterApi.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("HomeCompany");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("flutterApi.Models.PersonalImage", b =>

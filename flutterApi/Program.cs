@@ -106,6 +106,9 @@ builder.Services.AddScoped<IMedicalPricingDataService, MedicalPricingDataService
 builder.Services.AddScoped<IHomeCompaniesService,HomeCompaniesService>();
 builder.Services.AddScoped<IHomePriceService,HomePriceService>();
 builder.Services.AddScoped<IHomeLimitsService, HomeLimitsService>();
+builder.Services.AddScoped<IPersonalAccidentCompanyService,PersonalAccidentCompanyService>();
+builder.Services.AddScoped<IPersonalAccidentLimitService, PersonalAccidentLimitService>();
+builder.Services.AddScoped<IPersonalAccidentPriceService,PersonalAccidentPriceService>();   
 
 
 //builder.Services.AddScoped<IBaseRepository<T>,BaseRepository>();

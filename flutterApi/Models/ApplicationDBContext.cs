@@ -41,6 +41,9 @@ namespace login.Models
         public DbSet<HomePrice> homePrices { get; set; }
         public DbSet<HomeCompany> HomeCompany { get; set; }
         public DbSet<HomeLimits> homeLimits { get; set; }
+        public DbSet<PersonalAccidentCompany> PersonalAccidentCompanies { get; set; }
+        public DbSet<PersonalAccidentLimit> PersonalAccidentLimit { get; set; }
+        public DbSet<PersonalAccidentPrice> PersonalAccidentPrice { get; set; }
 
 
 

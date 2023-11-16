@@ -87,7 +87,7 @@ namespace flutterApi.Services
          }*/
         public async Task<ReturnPremiumAndTotalInstallment> GetPremiumAndTotalInstallment(int HomePriceId)
         {
-            string M = string.Empty;
+            
             var output = new ReturnPremiumAndTotalInstallment();
             var homeprice = await FindById(HomePriceId);
 
@@ -97,26 +97,24 @@ namespace flutterApi.Services
                 var company = await _homeCompaniesService.FindById(homeprice.HomeCompanyId);
                 if (company.Code == HomeCompanies.GIG.ToString())
                 {
-                    if (homeprice.PriceOfBuildings != null)
-                    {
-                        M = "Building";
-                    }
-                    else
-                    {
-                        M = "Content";
-                    }
+                    var result = await GetPremiumAndTotalInstallmentForGIG(HomePriceId);
+                    if(result.Message!=string.Empty) { output.Message=result.Message; }
+                    else { output.premiumAndTotal=result.premiumAndTotal; }
                 }
 
-
+                
 
                 else
                 {
+                    var M = string.Empty;
+
                     if (homeprice.PriceOfBuildings != null && homeprice.PriceOfTheContentOfBuilding != null)
                     {
                         if (homeprice.PriceOfBuildings == homeprice.PriceOfTheContentOfBuilding)
                         {
+
                             var price = await _homeLimitsService.GetPrice((double)homeprice.PriceOfBuildings, homeprice.HomeCompanyId, M);
-                            var x = new PremiumAndTotalInstallment()
+                            var x = new PremiumAndTotalInstallmentForHome()
                             {
                                 PremiumForBuilding = price.Price.Premium,
                                 PremiumForContent = price.Price.Premium,
@@ -128,7 +126,7 @@ namespace flutterApi.Services
                         else
                         {
                             var priceBuilding = await _homeLimitsService.GetPrice((double)homeprice.PriceOfBuildings, homeprice.HomeCompanyId, M);
-                            var x = new PremiumAndTotalInstallment()
+                            var x = new PremiumAndTotalInstallmentForHome()
                             {
                                 PremiumForBuilding = priceBuilding.Price.Premium,
                                 TotalInstallmentForBuilding = priceBuilding.Price.total,
@@ -144,7 +142,7 @@ namespace flutterApi.Services
                     if (homeprice.PriceOfBuildings != null && homeprice.PriceOfTheContentOfBuilding == null)
                     {
                         var priceBuilding = await _homeLimitsService.GetPrice((double)homeprice.PriceOfBuildings, homeprice.HomeCompanyId, M);
-                        var x = new PremiumAndTotalInstallment()
+                        var x = new PremiumAndTotalInstallmentForHome()
                         {
                             PremiumForBuilding = priceBuilding.Price.Premium,
                             TotalInstallmentForBuilding = priceBuilding.Price.total,
@@ -155,7 +153,7 @@ namespace flutterApi.Services
                     if (homeprice.PriceOfBuildings == null && homeprice.PriceOfTheContentOfBuilding != null)
                     {
                         var priceContent = await _homeLimitsService.GetPrice((Double)homeprice.PriceOfTheContentOfBuilding, homeprice.HomeCompanyId, M);
-                        var x = new PremiumAndTotalInstallment()
+                        var x = new PremiumAndTotalInstallmentForHome()
                         {
                             PremiumForContent = priceContent.Price.Premium,
                             TotalInstallmentForContent = priceContent.Price.total,
@@ -165,8 +163,59 @@ namespace flutterApi.Services
 
                 }
             }
+            
                 return output;
             }
+        public async Task<ReturnPremiumAndTotalInstallment> GetPremiumAndTotalInstallmentForGIG(int HomePriceId)
+        {
+            var output = new ReturnPremiumAndTotalInstallment();
+            var homeprice = await FindById(HomePriceId);
+
+            if (homeprice == null) { output.Message = "Can't Find Price!"; }
+            else
+            {
+                if (homeprice.PriceOfBuildings != null && homeprice.PriceOfTheContentOfBuilding != null)
+                {
+                    var priceBuilding = await _homeLimitsService.GetPrice((double)homeprice.PriceOfBuildings, homeprice.HomeCompanyId, "Building");
+                    var x = new PremiumAndTotalInstallmentForHome()
+                    {
+                        PremiumForBuilding = priceBuilding.Price.Premium,
+                        TotalInstallmentForBuilding = priceBuilding.Price.total,
+
+                    };
+                    var PriceContent = await _homeLimitsService.GetPrice((double)homeprice.PriceOfBuildings, homeprice.HomeCompanyId, "Content");
+                    x.PremiumForContent = PriceContent.Price.Premium;
+                    x.TotalInstallmentForContent = PriceContent.Price.total;
+                    output.premiumAndTotal = x;
+                }
+                if (homeprice.PriceOfBuildings != null && homeprice.PriceOfTheContentOfBuilding == null)
+                {
+                    var priceBuilding = await _homeLimitsService.GetPrice((double)homeprice.PriceOfBuildings, homeprice.HomeCompanyId, "Building");
+                    var x = new PremiumAndTotalInstallmentForHome()
+                    {
+                        PremiumForBuilding = priceBuilding.Price.Premium,
+                        TotalInstallmentForBuilding = priceBuilding.Price.total,
+
+                    };
+                    output.premiumAndTotal = x;
+                }
+                if (homeprice.PriceOfBuildings == null && homeprice.PriceOfTheContentOfBuilding != null)
+                {
+                    var PriceContent = await _homeLimitsService.GetPrice((double)homeprice.PriceOfBuildings, homeprice.HomeCompanyId, "Content");
+                    var x = new PremiumAndTotalInstallmentForHome()
+                    {
+                        PremiumForContent = PriceContent.Price.Premium,
+                        TotalInstallmentForContent = PriceContent.Price.total,
+
+                    };
+                    output.premiumAndTotal = x;
+                }
+            }
+            return output;
+
+        }
+                 
+            
         }
     }
 

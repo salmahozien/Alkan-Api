@@ -48,7 +48,7 @@ namespace flutterApi.Services
             {
                 if (limit.From == BuildingPrice && limit.From == contentPrice)
                 {
-                    var x = new PremiumAndTotalInstallment()
+                    var x = new PremiumAndTotalInstallmentForHome()
                     {
                         PremiumForBuilding = limit.NetPremium,
                         TotalInstallmentForBuilding = limit.TotalInstallment,
@@ -66,7 +66,7 @@ namespace flutterApi.Services
 
                 if (limit.To == BuildingPrice && limit.To == contentPrice)
                 {
-                    var x = new PremiumAndTotalInstallment()
+                    var x = new PremiumAndTotalInstallmentForHome()
                     {
                         PremiumForBuilding = limit.NetPremium,
                         TotalInstallmentForBuilding = limit.TotalInstallment,
@@ -81,7 +81,7 @@ namespace flutterApi.Services
                 }
                 if (limit.From < BuildingPrice && limit.To > BuildingPrice && limit.From < contentPrice && limit.To > contentPrice)
                 {
-                    var x = new PremiumAndTotalInstallment()
+                    var x = new PremiumAndTotalInstallmentForHome()
                     {
                         PremiumForBuilding = limit.NetPremium,
                         TotalInstallmentForBuilding = limit.TotalInstallment,
@@ -94,7 +94,7 @@ namespace flutterApi.Services
                 }
                 if (limit.From == BuildingPrice && contentPrice == 0)
                 {
-                    var x = new PremiumAndTotalInstallment()
+                    var x = new PremiumAndTotalInstallmentForHome()
                     {
                         PremiumForBuilding = limit.NetPremium,
                         TotalInstallmentForBuilding = limit.TotalInstallment
@@ -106,7 +106,7 @@ namespace flutterApi.Services
                 }
                 if (limit.To == BuildingPrice && contentPrice == 0)
                 {
-                    var x = new PremiumAndTotalInstallment()
+                    var x = new PremiumAndTotalInstallmentForHome()
                     {
                         PremiumForBuilding = limit.NetPremium,
                         TotalInstallmentForBuilding = limit.TotalInstallment,
@@ -117,7 +117,7 @@ namespace flutterApi.Services
                 }
                 if (limit.From < BuildingPrice && limit.To > BuildingPrice && contentPrice == 0)
                 {
-                    var x = new PremiumAndTotalInstallment()
+                    var x = new PremiumAndTotalInstallmentForHome()
                     {
                         PremiumForBuilding = limit.NetPremium,
                         TotalInstallmentForBuilding = limit.TotalInstallment
@@ -130,7 +130,7 @@ namespace flutterApi.Services
 
                 if (limit.From < BuildingPrice && limit.To > BuildingPrice && limit.From < contentPrice && limit.To > contentPrice)
                 {
-                    var x = new PremiumAndTotalInstallment()
+                    var x = new PremiumAndTotalInstallmentForHome()
                     {
                         PremiumForBuilding = limit.NetPremium,
                         TotalInstallmentForBuilding = limit.TotalInstallment,
@@ -143,7 +143,7 @@ namespace flutterApi.Services
                 }
                 if (limit.From == contentPrice && BuildingPrice == 0)
                 {
-                    var x = new PremiumAndTotalInstallment()
+                    var x = new PremiumAndTotalInstallmentForHome()
                     {
                         PremiumForContent = limit.NetPremium,
                         TotalInstallmentForContent = limit.TotalInstallment
@@ -154,7 +154,7 @@ namespace flutterApi.Services
                 }
                 if (limit.To == contentPrice && BuildingPrice == 0)
                 {
-                    var x = new PremiumAndTotalInstallment()
+                    var x = new PremiumAndTotalInstallmentForHome()
                     {
                         PremiumForContent = limit.NetPremium,
                         TotalInstallmentForContent = limit.TotalInstallment,
@@ -165,7 +165,7 @@ namespace flutterApi.Services
                 }
                 if (limit.From < contentPrice && limit.To > contentPrice && BuildingPrice == 0)
                 {
-                    var x = new PremiumAndTotalInstallment()
+                    var x = new PremiumAndTotalInstallmentForHome()
                     {
                         PremiumForBuilding = limit.NetPremium,
                         TotalInstallmentForBuilding = limit.TotalInstallment,
@@ -192,122 +192,143 @@ namespace flutterApi.Services
             var output = new ReturnPriceDto();
 
 
-            var HomeLimits = await FindAll(x => x.HomeCompanyId == CompanyId);
+            
             var company = await _companiesService.FindById(CompanyId);
 
-            if (HomeLimits.Count() != 0)
-            {
+            
                 if (company.Code == HomeCompanies.Orient.ToString())
                 {
+                    var result = await GetPriceORient(Price, CompanyId);
+                if (result.Message != string.Empty) { output.Message= result.Message; }
+                else { output.Price = result.Price; }
+                }
+                if(company.Code==HomeCompanies.MIC.ToString())
+            {
+                var result = await GetPriceMIC(Price, CompanyId);
+                if (result.Message != string.Empty) { output.Message = result.Message; }
+                else { output.Price = result.Price; }
+            }
+             
+           if(company.Code == HomeCompanies.GIG.ToString())
+            {
+                var result= await GetPriceGIG(Price, CompanyId,type);
+                if (result.Message != string.Empty) { output.Message = result.Message; }
+                else { output.Price = result.Price; }
+            }
 
+          
+            return output;
 
-                    foreach (var item in HomeLimits)
+       }
+        public async Task<ReturnPriceDto> GetPriceORient(double Price,int CompanyId)
+        {
+            var HomeLimits = await FindAll(x => x.HomeCompanyId == CompanyId);
+            var output = new ReturnPriceDto();
+            foreach (var item in HomeLimits)
+            {
+                if (item.From == Price)
+                {
+                    var x = new PriceDto()
                     {
-                        if (item.From == Price)
-                        {
-                            var x = new PriceDto()
-                            {
-                                Premium = item.NetPremium,
-                                total = item.TotalInstallment
+                        Premium = item.NetPremium * Price,
+                        total = item.TotalInstallment * Price,
 
-                            };
-                            output.Price = x;
-                            output.Message = string.Empty;
-                            break;
-                        }
+                    };
+                    output.Price = x;
+                    output.Message = string.Empty;
+                    break;
+                }
 
-                        if (item.To == Price)
-                        {
-                            var x = new PriceDto()
-                            {
-                                Premium = item.NetPremium,
-                                total = item.TotalInstallment
+                if (item.To == Price)
+                {
+                    var x = new PriceDto()
+                    {
+                        Premium = item.NetPremium * Price,
+                        total = item.TotalInstallment *Price
 
-                            };
-                            output.Price = x;
-                            output.Message = string.Empty;
-                            break;
+                    };
+                    output.Price = x;
+                    output.Message = string.Empty;
+                    break;
 
-                        }
-                        if (item.From < Price && item.To > Price)
-                        {
-                            var x = new PriceDto()
-                            {
-                                Premium = item.NetPremium,
-                                total = item.TotalInstallment
+                }
+                if (item.From < Price && item.To > Price)
+                {
+                    var x = new PriceDto()
+                    {
+                        Premium = item.NetPremium * Price,
+                        total = item.TotalInstallment *Price
 
-                            };
-                            output.Price = x;
-                            output.Message = string.Empty;
-                            break;
-                        }
-                        else
-                        {
-                            output.Message = "No limit Found";
-                        }
-                    }
+                    };
+                    output.Price = x;
+                    output.Message = string.Empty;
+                    break;
+                }
+                else
+                {
+                    output.Message = "No limit Found";
                 }
             }
-            else
+            return output;      
+        }
+
+        public async Task<ReturnPriceDto> GetPriceMIC(double Price, int CompanyId)
+        {
+            var output = new ReturnPriceDto();
+            var HomeLimits = await FindAll(x => x.HomeCompanyId == CompanyId);
+            foreach (var item in HomeLimits)
             {
-                output.Message = "No limit Found";
-            }
-            
-            if (company.Code == HomeCompanies.MIC.ToString())
-            {
-                foreach (var item in HomeLimits)
-                    {
-                        if (item.From == Price)
-                        {
-                            var x = new PriceDto()
-                            {
-                                Premium = (int?)(Price * .0015),
-                                total = item.TotalInstallment
-
-                            };
-                            output.Price = x;
-                            output.Message = string.Empty;
-                            break;
-                        }
-
-                        if (item.To == Price)
-                        {
-                            var x = new PriceDto()
-                            {
-                                Premium = (int?)(Price * .0015),
-                                total = item.TotalInstallment
-
-                            };
-                            output.Price = x;
-                            output.Message = string.Empty;
-                            break;
-
-                        }
-                        if (item.From < Price && item.To > Price)
-                        {
-                            var x = new PriceDto()
-                            {
-                                Premium = (int?)(Price * .0015),
-                                total = item.TotalInstallment
-
-                            };
-                            output.Price = x;
-                            output.Message = string.Empty;
-                            break;
-                        }
-                        else
-                        {
-                            output.Message = "No limit Found";
-                        }
-                    }
-            }
-            if (company.Code == HomeCompanies.GIG.ToString())
-            {
-               
-                if (type== "Building")
+                if (item.From == Price)
                 {
+                    var x = new PriceDto()
+                    {
+                        Premium = (int?)(Price * .0015),
+                        total = item.TotalInstallment * Price
 
-                
+                    };
+                    output.Price = x;
+                    output.Message = string.Empty;
+                    break;
+                }
+
+                if (item.To == Price)
+                {
+                    var x = new PriceDto()
+                    {
+                        Premium = (int?)(Price * .0015),
+                        total = item.TotalInstallment * Price
+
+                    };
+                    output.Price = x;
+                    output.Message = string.Empty;
+                    break;
+
+                }
+                if (item.From < Price && item.To > Price)
+                {
+                    var x = new PriceDto()
+                    {
+                        Premium = (int?)(Price * .0015),
+                        total = item.TotalInstallment * Price
+
+                    };
+                    output.Price = x;
+                    output.Message = string.Empty;
+                    break;
+                }
+            }
+
+            return output;
+        }
+        public async Task<ReturnPriceDto> GetPriceGIG(double Price, int CompanyId, string Type)
+        {
+            var output = new ReturnPriceDto();
+            var HomeLimits = await FindAll(x => x.HomeCompanyId == CompanyId);
+
+            if (Type == "Building")
+            {
+
+
                 foreach (var item in HomeLimits)
                 {
                     if (item.From == Price)
@@ -315,7 +336,7 @@ namespace flutterApi.Services
                         var x = new PriceDto()
                         {
                             Premium = (int?)(Price * .0005),
-                            total = item.TotalInstallment
+                            total = item.TotalInstallment * Price
 
                         };
                         output.Price = x;
@@ -328,7 +349,7 @@ namespace flutterApi.Services
                         var x = new PriceDto()
                         {
                             Premium = (int?)(Price * .0005),
-                            total = item.TotalInstallment
+                            total = item.TotalInstallment *Price
 
                         };
                         output.Price = x;
@@ -341,7 +362,7 @@ namespace flutterApi.Services
                         var x = new PriceDto()
                         {
                             Premium = (int?)(Price * .0005),
-                            total = item.TotalInstallment
+                            total = item.TotalInstallment * Price
 
                         };
                         output.Price = x;
@@ -354,63 +375,58 @@ namespace flutterApi.Services
                     }
                 }
             }
-                else
+            else
+            {
+                foreach (var item in HomeLimits)
                 {
-                    foreach (var item in HomeLimits)
+                    if (item.From == Price)
                     {
-                        if (item.From == Price)
+                        var x = new PriceDto()
                         {
-                            var x = new PriceDto()
-                            {
-                                Premium = (int?)(Price * .0025),
-                                total = item.TotalInstallment
+                            Premium = (int?)(Price * .0025),
+                            total = item.TotalInstallment * Price
 
-                            };
-                            output.Price = x;
-                            output.Message = string.Empty;
-                            break;
-                        }
+                        };
+                        output.Price = x;
+                        output.Message = string.Empty;
+                        break;
+                    }
 
-                        if (item.To == Price)
+                    if (item.To == Price)
+                    {
+                        var x = new PriceDto()
                         {
-                            var x = new PriceDto()
-                            {
-                                Premium = (int?)(Price * .0025),
-                                total = item.TotalInstallment
+                            Premium = (int?)(Price * .0025),
+                            total = item.TotalInstallment * Price
 
-                            };
-                            output.Price = x;
-                            output.Message = string.Empty;
-                            break;
+                        };
+                        output.Price = x;
+                        output.Message = string.Empty;
+                        break;
 
-                        }
-                        if (item.From < Price && item.To > Price)
+                    }
+                    if (item.From < Price && item.To > Price)
+                    {
+                        var x = new PriceDto()
                         {
-                            var x = new PriceDto()
-                            {
-                                Premium = (int?)(Price * .0025),
-                                total = item.TotalInstallment
+                            Premium = (int?)(Price * .0025),
+                            total = item.TotalInstallment * Price
 
-                            };
-                            output.Price = x;
-                            output.Message = string.Empty;
-                            break;
-                        }
-                        else
-                        {
-                            output.Message = "No limit Found";
-                        }
+                        };
+                        output.Price = x;
+                        output.Message = string.Empty;
+                        break;
+                    }
+                    else
+                    {
+                        output.Message = "No limit Found";
                     }
                 }
-
             }
-
-
-
-
-
             return output;
 
         }
+
+
     }
 }
