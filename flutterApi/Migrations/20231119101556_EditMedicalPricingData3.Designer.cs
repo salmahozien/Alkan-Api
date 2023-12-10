@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using login.Models;
 
@@ -11,9 +12,10 @@ using login.Models;
 namespace flutterApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231119101556_EditMedicalPricingData3")]
+    partial class EditMedicalPricingData3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,20 +47,23 @@ namespace flutterApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccidentId"), 1L, 1);
 
+                    b.Property<string>("AccidentLocation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Images")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Latitude")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Longitude")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("PolicyId")
+                    b.Property<int>("PolicyId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("AccidentId");
@@ -1093,13 +1098,21 @@ namespace flutterApi.Migrations
 
             modelBuilder.Entity("flutterApi.Models.Accident", b =>
                 {
-                    b.HasOne("flutterApi.Models.Policy", null)
+                    b.HasOne("flutterApi.Models.Policy", "policy")
                         .WithMany("Accidents")
-                        .HasForeignKey("PolicyId");
+                        .HasForeignKey("PolicyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("flutterApi.Models.User", null)
+                    b.HasOne("flutterApi.Models.User", "user")
                         .WithMany("Accidents")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("policy");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("flutterApi.Models.AgeLimits", b =>

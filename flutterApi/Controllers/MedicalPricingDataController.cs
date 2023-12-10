@@ -9,11 +9,17 @@ namespace flutterApi.Controllers
     [ApiController]
     public class MedicalPricingDataController : ControllerBase
     {
-        private readonly IMedicalPricingDataService _mediicalPricingService;
+        private readonly IMedicalPricingDataService _medicalPricingService;
+
+        public MedicalPricingDataController(IMedicalPricingDataService medicalPricingService)
+        {
+            _medicalPricingService = medicalPricingService;
+        }
+
         [HttpPost("AddMedicalPricingData")]
         public async Task<IActionResult> AddMedicalPricingData(CreateMedicalPricingDataDto model)
         {
-            var result= await _mediicalPricingService.AddMedicalPricingData(model);
+            var result= await _medicalPricingService.AddMedicalPricingData(model);
             if (result.Message != string.Empty || result.MedicalPricingData == null)
             {
                 return BadRequest(result.Message);

@@ -50,7 +50,7 @@ namespace flutterApi.Services
                             var x = new PriceDto()
                             {
                                 Premium=null,
-                                total = item.TotalInstallment * Price
+                                total = item.TotalInstallment 
                             };
                             output.Message = string.Empty;
                             output.Price = x; break;
@@ -60,8 +60,8 @@ namespace flutterApi.Services
                         {
                             var x = new PriceDto()
                             {
-                                Premium = item.NetPremium * Price,
-                                total = item.TotalInstallment * Price
+                                Premium = item.NetPremium ,
+                                total = item.TotalInstallment
                             };
                             output.Message = string.Empty;
                             output.Price = x; break;
@@ -74,7 +74,7 @@ namespace flutterApi.Services
                         {
                             var x = new PriceDto()
                             {Premium = null,
-                                total = item.TotalInstallment * Price
+                                total = item.TotalInstallment
                             };
                             output.Message = string.Empty;
                             output.Price = x; break;
@@ -84,8 +84,8 @@ namespace flutterApi.Services
                         {
                             var x = new PriceDto()
                             {
-                                Premium = item.NetPremium * Price,
-                                total = item.TotalInstallment * Price
+                                Premium = item.NetPremium,
+                                total = item.TotalInstallment
                             };
                             output.Message = string.Empty;
                             output.Price = x; break;
@@ -98,7 +98,7 @@ namespace flutterApi.Services
                             var x = new PriceDto()
                             {
                                 Premium=null,
-                                total = item.TotalInstallment * Price
+                                total = item.TotalInstallment
                             };
                             output.Message = string.Empty;
                             output.Price = x; break;
@@ -108,8 +108,8 @@ namespace flutterApi.Services
                         {
                             var x = new PriceDto()
                             {
-                                Premium = item.NetPremium * Price,
-                                total = item.TotalInstallment * Price
+                                Premium = item.NetPremium  ,
+                                total = item.TotalInstallment
                             };
                             output.Message = string.Empty;
                             output.Price = x; break;

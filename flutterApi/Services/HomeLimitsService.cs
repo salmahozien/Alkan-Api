@@ -230,8 +230,8 @@ namespace flutterApi.Services
                 {
                     var x = new PriceDto()
                     {
-                        Premium = item.NetPremium * Price,
-                        total = item.TotalInstallment * Price,
+                        Premium = item.NetPremium ,
+                        total = item.TotalInstallment ,
 
                     };
                     output.Price = x;
@@ -243,8 +243,8 @@ namespace flutterApi.Services
                 {
                     var x = new PriceDto()
                     {
-                        Premium = item.NetPremium * Price,
-                        total = item.TotalInstallment *Price
+                        Premium = item.NetPremium ,
+                        total = item.TotalInstallment 
 
                     };
                     output.Price = x;
@@ -256,8 +256,8 @@ namespace flutterApi.Services
                 {
                     var x = new PriceDto()
                     {
-                        Premium = item.NetPremium * Price,
-                        total = item.TotalInstallment *Price
+                        Premium = item.NetPremium ,
+                        total = item.TotalInstallment 
 
                     };
                     output.Price = x;
@@ -283,7 +283,7 @@ namespace flutterApi.Services
                     var x = new PriceDto()
                     {
                         Premium = (int?)(Price * .0015),
-                        total = item.TotalInstallment * Price
+                        total = item.TotalInstallment
 
                     };
                     output.Price = x;
@@ -296,7 +296,7 @@ namespace flutterApi.Services
                     var x = new PriceDto()
                     {
                         Premium = (int?)(Price * .0015),
-                        total = item.TotalInstallment * Price
+                        total = item.TotalInstallment
 
                     };
                     output.Price = x;
@@ -309,7 +309,7 @@ namespace flutterApi.Services
                     var x = new PriceDto()
                     {
                         Premium = (int?)(Price * .0015),
-                        total = item.TotalInstallment * Price
+                        total = item.TotalInstallment
 
                     };
                     output.Price = x;
@@ -336,7 +336,7 @@ namespace flutterApi.Services
                         var x = new PriceDto()
                         {
                             Premium = (int?)(Price * .0005),
-                            total = item.TotalInstallment * Price
+                            total = item.TotalInstallment
 
                         };
                         output.Price = x;
@@ -349,7 +349,7 @@ namespace flutterApi.Services
                         var x = new PriceDto()
                         {
                             Premium = (int?)(Price * .0005),
-                            total = item.TotalInstallment *Price
+                            total = item.TotalInstallment
 
                         };
                         output.Price = x;
@@ -362,7 +362,7 @@ namespace flutterApi.Services
                         var x = new PriceDto()
                         {
                             Premium = (int?)(Price * .0005),
-                            total = item.TotalInstallment * Price
+                            total = item.TotalInstallment 
 
                         };
                         output.Price = x;
@@ -384,7 +384,7 @@ namespace flutterApi.Services
                         var x = new PriceDto()
                         {
                             Premium = (int?)(Price * .0025),
-                            total = item.TotalInstallment * Price
+                            total = item.TotalInstallment
 
                         };
                         output.Price = x;
@@ -397,7 +397,7 @@ namespace flutterApi.Services
                         var x = new PriceDto()
                         {
                             Premium = (int?)(Price * .0025),
-                            total = item.TotalInstallment * Price
+                            total = item.TotalInstallment
 
                         };
                         output.Price = x;
@@ -410,7 +410,7 @@ namespace flutterApi.Services
                         var x = new PriceDto()
                         {
                             Premium = (int?)(Price * .0025),
-                            total = item.TotalInstallment * Price
+                            total = item.TotalInstallment
 
                         };
                         output.Price = x;

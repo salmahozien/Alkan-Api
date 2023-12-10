@@ -36,19 +36,19 @@ namespace flutterApi.Services
             if (model == null) { output.Message = " empty model"; }
             else
             {
-                var user = await _userManager.FindByIdAsync(model.UserId);
+              //  var user = await _userManager.FindByIdAsync(model.UserId);
 
-                if (user == null) { output.Message = "user not found"; }
-                else
-                {
-                    _userManager.Adapt(user);
-                    var policy = await _policyService.FindById(model.PolicyId);
-                    if (policy == null) { output.Message = "policy not found"; }
-                    else
-                    {
+               // if (user == null) { output.Message = "user not found"; }
+              //  else
+              //  {
+                  //  _userManager.Adapt(user);
+                  //  var policy = await _policyService.FindById(model.PolicyId);
+                   // if (policy == null) { output.Message = "policy not found"; }
+                   // else
+                  //  {
 
                         // Var USERPHONE = await _userManager.FindByEmailAsync(model.PhoneNumber);
-                        var Image = await UploadImage(model.Images, model.PolicyId);
+                        var Image = await UploadImage(model.Images, 1);
                         if (Image.Message != string.Empty)
                         {
                             output.Message = Image.Message;
@@ -58,11 +58,13 @@ namespace flutterApi.Services
                         {
                             var Accident = new Accident()
                             {
-                                AccidentLocation = model.AccidentLocation,
-                                Details = model.Details,
+                              //  AccidentLocation = model.AccidentLocation,
+                              Latitude = model.Latitude,
+                              Longitude = model.Longitude,
+                               // Details = model.Details,
                                 Images = Image.ImageName,
-                                PolicyId = model.PolicyId,
-                                UserId = model.UserId
+                               // PolicyId = model.PolicyId,
+                              //  UserId = model.UserId
 
 
 
@@ -88,8 +90,8 @@ namespace flutterApi.Services
                             }
                         }
                     }
-                }
-            }
+              //  }
+           // }
 
             return output;
         }

@@ -5,12 +5,13 @@ namespace flutterApi.DTOs.Accident
 {
     public class CreateAccidentDto
     {
-       
-       // [DataType(DataType.Url)]
+
+        // [DataType(DataType.Url)]
         //location
-        public string AccidentLocation { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         [DataType(DataType.MultilineText)]
-        public string Details { get; set; }
+       // public string Details { get; set; }
         //images
      //   [DataType(DataType.Upload)]
      [Required]
@@ -18,8 +19,8 @@ namespace flutterApi.DTOs.Accident
        // [NotMapped]
        // public IFormFile? ImageFile { get; set; }
 
-        public string UserId { get; set; }
-        public int PolicyId { get; set; }
+       // public string UserId { get; set; }
+       // public int PolicyId { get; set; }
         // public string PhoneNumber { get; set; }
 
 

@@ -26,10 +26,20 @@ namespace flutterApi.Services
                 if (user == null) { output.Message = "User Not Found !"; }
                 else
                 {
-                    
 
 
-                    var MedicalPricingData =model.Adapt<MedicalPricingData>();
+
+                    var MedicalPricingData = new MedicalPricingData()
+                    {
+                          Type = model.Type,
+                          DateOfBirth=model.DatOfBirth,
+                          UserId=model.UserId,
+                          CompanyHealthInsuranceTypesId=model.CompanyHealthInsuranceTypesId,
+                          MedicalCompanyId=model.MedicalCompanyId
+
+
+
+                    };
                     if (MedicalPricingData == null) { output.Message = "Can't Add"; }
                     else
                     {

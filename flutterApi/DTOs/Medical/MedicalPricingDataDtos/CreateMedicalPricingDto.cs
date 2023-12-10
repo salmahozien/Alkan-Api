@@ -9,7 +9,9 @@ namespace flutterApi.DTOs.Medical.MedicalPricingDataDtos
        
     
         public string UserId { get; set; }
+        public int MedicalCompanyId { get; set; }
+        public int CompanyHealthInsuranceTypesId { get; set; }
 
-        public double Price { get; set; }
+
     }
 }

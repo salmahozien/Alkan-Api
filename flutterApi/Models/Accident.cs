@@ -11,10 +11,12 @@ namespace flutterApi.Models
        // [DataType(DataType.Url)]
         [Required]
         //location
-        public string AccidentLocation { get; set; }
-        [DataType(DataType.MultilineText)]
-        [Required]
-        public string Details { get; set; }
+        //public string AccidentLocation { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }   
+      //  [DataType(DataType.MultilineText)]
+       // [Required]
+       // public string Details { get; set; }
         [Required]
         //images
         //  [DataType(DataType.Upload)]
@@ -23,14 +25,14 @@ namespace flutterApi.Models
        // [NotMapped]
        // public IFormFile? ImageFile { get; set; }
 
-        [Required]
-        public virtual User user  { get; set; }
+      //  [Required]
+      //  public virtual User user  { get; set; }
 
       
-        public virtual string UserId { get; set; }
-        public  virtual Policy policy { get; set; }
+      //  public virtual string UserId { get; set; }
+      //  public  virtual Policy policy { get; set; }
       
-        public  virtual int PolicyId { get; set; }
+       // public  virtual int PolicyId { get; set; }
 
      
 

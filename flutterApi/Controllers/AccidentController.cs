@@ -20,23 +20,13 @@ namespace flutterApi.Controllers
 
         public async Task<IActionResult> AddAccident(CreateAccidentDto model)
         {
-
-
-           
-            
-                var NewAccident = await _AccidentService.AddAccident(model);
+            var NewAccident = await _AccidentService.AddAccident(model);
             if(NewAccident.Message!=string.Empty||NewAccident.UpdateAccident==null ) {
                 return BadRequest(NewAccident.Message);
             }
 
-
             return Ok(NewAccident.UpdateAccident);
-
-
-
-
-
-        }
+             }
         [HttpGet]
         public async Task<IActionResult> GetAccidentById(int id)
         {

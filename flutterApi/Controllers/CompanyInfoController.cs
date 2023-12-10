@@ -128,12 +128,12 @@ namespace flutterApi.Controllers
             if (Company.CompanyCode == CarCompanies.Royal.ToString())
             {
                 if (Price < 750000) {
-                    com = _context.CompanyInfo.Include(x => x.insurance.Where(x => x.Classificatin == Classificatin.LessThan750)).Where(x => x.CompanyId == CompanyId);
+                    com = _context.CompanyInfo.Include(x => x.insurance.Where(x => x.Classificatin == Classificatin.LessThan750)).Where(x => x.CompanyId == CompanyId).Include(x=>x.Company);
                     return Ok(com);
                 }
                else 
                 {
-                    com = _context.CompanyInfo.Include(x => x.insurance.Where(x => x.Classificatin == Classificatin.MoreThan750)).Where(x => x.CompanyId == CompanyId);
+                    com = _context.CompanyInfo.Include(x => x.insurance.Where(x => x.Classificatin == Classificatin.MoreThan750)).Where(x => x.CompanyId == CompanyId).Include(x=>x.Company);
                     return Ok(com);
                 }
               
