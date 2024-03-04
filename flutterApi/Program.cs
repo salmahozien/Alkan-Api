@@ -122,6 +122,9 @@ builder.Services.AddControllers()
 
     );
 var app = builder.Build();
+using var scope = builder.Services.BuildServiceProvider().CreateScope();
+var services = scope.ServiceProvider;
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -129,7 +132,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+if (!app.Environment.IsDevelopment())
+{
 
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+    db.Database.Migrate();
+}
 
 app.UseHttpsRedirection();
 /*app.UseStaticFiles(new StaticFileOptions
